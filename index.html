@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chandrayaan-3 - India's Historic Moon Mission</title>
+    
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="Explore India's historic Chandrayaan-3 mission. Discover the key achievements, interactive timeline, and 3D lunar landing systems.">
+    <meta name="keywords" content="ISRO, Chandrayaan-3, Moon Mission, Space Exploration, Vikram Lander, Pragyan Rover, Lunar South Pole">
+    <meta name="author" content="ISRO Pride">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 3D Three.js Space Canvas -->
+    <canvas id="space-canvas"></canvas>
+
+    <!-- Space Dust & Star Particles Overlay -->
+    <div id="particle-overlay"></div>
+
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="header-container">
+            <a href="#" class="logo" id="logo-trigger">
+                <span class="logo-icon"><i class="fa-solid fa-satellite-dish"></i></span>
+                <span class="logo-text">CHANDRAYAAN-3</span>
+            </a>
+            
+            <nav class="nav-menu">
+                <a href="#hero" class="nav-link active">Home</a>
+                <a href="#about" class="nav-link">Overview</a>
+                <a href="#achievements" class="nav-link">Achievements</a>
+                <a href="#timeline" class="nav-link">Timeline</a>
+                <a href="#components" class="nav-link">Components</a>
+            </nav>
+
+            <div class="header-actions">
+                <div class="live-mission-badge">
+                    <span class="live-pulse"></span>
+                    <span>LIVE MISSION</span>
+                </div>
+                <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="section-container hero-grid">
+                
+                <!-- Hero Text Left -->
+                <div class="hero-content">
+                    <div class="hero-badge animate-fade-in">
+                        <span class="badge-dot"></span>
+                        INDIA'S PRIDE. HUMANITY'S LEAP.
+                    </div>
+                    
+                    <h1 class="hero-title animate-slide-up">
+                        Chandrayaan-3
+                    </h1>
+                    <h2 class="hero-subtitle animate-slide-up">
+                        India's Historic Moon Mission
+                    </h2>
+                    
+                    <p class="hero-description animate-slide-up">
+                        A proud milestone by ISRO that made India the first country to soft-land near the Moon's south pole on 23 August 2023, paving the way for future space discoveries and interplanetary endeavors.
+                    </p>
+                    
+                    <div class="hero-cta-buttons animate-slide-up">
+                        <a href="#about" class="btn btn-primary">
+                            <span>Explore Mission</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <button class="btn btn-secondary" id="open-video-modal">
+                            <i class="fa-solid fa-circle-play"></i>
+                            <span>Watch Journey</span>
+                        </button>
+                    </div>
+
+                    <!-- Statistics Bar -->
+                    <div class="stats-container animate-fade-in">
+                        <div class="stat-card">
+                            <div class="stat-value">23</div>
+                            <div class="stat-label">AUG 2023</div>
+                            <div class="stat-sub">LANDING DATE</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">1st</div>
+                            <div class="stat-label">COUNTRY</div>
+                            <div class="stat-sub">TO LAND NEAR SOUTH POLE</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">15</div>
+                            <div class="stat-label">MINUTES</div>
+                            <div class="stat-sub">TERROR TO LANDING</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value"><i class="fa-solid fa-bolt"></i> 100%</div>
+                            <div class="stat-label">SUCCESS</div>
+                            <div class="stat-sub">MISSION RATE</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Visual Right (Emptied to show the 3D rotating Moon) -->
+                <div class="hero-visual"></div>
+
+            </div>
+        </section>
+
+        <!-- About Section / Overview -->
+        <section id="about" class="about-section scroll-reveal">
+            <div class="section-container">
+                <div class="section-header">
+                    <span class="section-badge">MISSION OVERVIEW</span>
+                    <h2 class="section-title">About Chandrayaan-3</h2>
+                </div>
+                
+                <div class="about-grid">
+                    <div class="about-text-content">
+                        <p class="lead-text">
+                            Chandrayaan-3 is India's third lunar exploration mission under the Chandrayaan program. It successfully demonstrated India's capability for safe and soft landing on the lunar surface, specifically near the unexplored south pole.
+                        </p>
+                        <p>
+                            The mission consists of a lander module named <strong>Vikram</strong>, a rover module named <strong>Pragyan</strong>, and a <strong>Propulsion Module</strong>. Vikram carried Pragyan to the moon surface, which was later deployed to conduct in-situ chemical analyses and scientific experiments.
+                        </p>
+                        <p>
+                            With this monumental achievement, ISRO has not only secured India's place as a global space superpower but also gathered crucial lunar data that will assist space agencies worldwide in future manned landings.
+                        </p>
+                    </div>
+                    
+                    <!-- Interactive Video Showcase Card -->
+                    <div class="about-video-card" id="video-preview-trigger">
+                        <img src="assets/vikram.png" alt="Vikram lander on moon surface" class="video-thumbnail">
+                        <div class="video-overlay">
+                            <div class="play-btn-pulse">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                            <span class="video-tag">CHANDRAYAAN-3</span>
+                            <span class="video-title">MISSION HIGHLIGHTS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Achievements -->
+        <section id="achievements" class="achievements-section scroll-reveal">
+            <div class="section-container">
+                <div class="section-header center">
+                    <span class="section-badge">KEY ACHIEVEMENTS</span>
+                    <h2 class="section-title">Historic Milestones</h2>
+                </div>
+                
+                <div class="achievements-grid">
+                    <!-- Achievement 1 -->
+                    <div class="achievement-card">
+                        <div class="card-glow"></div>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                        <h3 class="card-title">Successful Soft Landing</h3>
+                        <p class="card-text">Safely and precisely landed on the lunar surface on 23 August 2023 at 18:04 IST, fulfilling our primary objective.</p>
+                    </div>
+
+                    <!-- Achievement 2 -->
+                    <div class="achievement-card">
+                        <div class="card-glow"></div>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <h3 class="card-title">Vikram & Pragyan</h3>
+                        <p class="card-text">Successfully deployed rover Pragyan which traveled 100+ meters, conducting crucial in-situ chemical experiments.</p>
+                    </div>
+
+                    <!-- Achievement 3 -->
+                    <div class="achievement-card">
+                        <div class="card-glow"></div>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-flag"></i>
+                        </div>
+                        <h3 class="card-title">First Near South Pole</h3>
+                        <p class="card-text">India became the first nation to soft-land near the rugged, highly challenging lunar south pole coordinates.</p>
+                    </div>
+
+                    <!-- Achievement 4 -->
+                    <div class="achievement-card">
+                        <div class="card-glow"></div>
+                        <div class="card-icon">
+                            <i class="fa-solid fa-rocket"></i>
+                        </div>
+                        <h3 class="card-title">Proud Moment for India</h3>
+                        <p class="card-text">A historical leap for ISRO and a pride-inducing milestone that united 1.4 billion Indians in celebration.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission Timeline -->
+        <section id="timeline" class="timeline-section scroll-reveal">
+            <div class="section-container">
+                <div class="section-header center">
+                    <span class="section-badge">MISSION TIMELINE</span>
+                    <h2 class="section-title">The Path to the Moon</h2>
+                </div>
+
+                <!-- Timeline Scrubber Area -->
+                <div class="timeline-container">
+                    <div class="timeline-progress-line">
+                        <div class="timeline-progress-fill" id="timeline-progress"></div>
+                    </div>
+                    
+                    <div class="timeline-nodes-wrapper">
+                        <!-- Node 1 -->
+                        <div class="timeline-node active" data-index="0" data-date="14 JUL 2023" data-title="Launch Phase" data-desc="Chandrayaan-3 launched successfully aboard LVM3-M4 rocket from Satish Dhawan Space Centre (SDSC) SHAR, Sriharikota, placing the spacecraft in precise Earth orbit." data-icon="fa-rocket">
+                            <div class="node-dot"><i class="fa-solid fa-rocket"></i></div>
+                            <span class="node-date">14 JUL</span>
+                        </div>
+                        <!-- Node 2 -->
+                        <div class="timeline-node" data-index="1" data-date="05 AUG 2023" data-title="Lunar Orbit Insertion" data-desc="After executing successful Earth-bound maneuvers, the spacecraft successfully completed Lunar Orbit Insertion (LOI), entering a stable elliptical orbit around the Moon." data-icon="fa-circle-notch">
+                            <div class="node-dot"><i class="fa-solid fa-circle-notch"></i></div>
+                            <span class="node-date">05 AUG</span>
+                        </div>
+                        <!-- Node 3 -->
+                        <div class="timeline-node" data-index="2" data-date="17 AUG 2023" data-title="Lander Separation" data-desc="The Lander Module (Vikram) successfully separated from the Propulsion Module, preparing for the power descent and deboosting phases in lower orbit." data-icon="fa-puzzle-piece">
+                            <div class="node-dot"><i class="fa-solid fa-puzzle-piece"></i></div>
+                            <span class="node-date">17 AUG</span>
+                        </div>
+                        <!-- Node 4 -->
+                        <div class="timeline-node" data-index="3" data-date="23 AUG 2023" data-title="Soft Landing" data-desc="History created! The Vikram lander touched down safely on the south polar region of the lunar surface at 18:04 IST after a flawless 15-minute powered descent." data-icon="fa-bullseye">
+                            <div class="node-dot"><i class="fa-solid fa-bullseye"></i></div>
+                            <span class="node-date">23 AUG</span>
+                        </div>
+                        <!-- Node 5 -->
+                        <div class="timeline-node" data-index="4" data-date="24 AUG 2023+" data-title="Rover Exploration" data-desc="The Pragyan rover rolled down the lander ramp to walk on the moon, verifying the presence of Sulfur, Oxygen, Iron, and other vital elements in lunar soil." data-icon="fa-robot">
+                            <div class="node-dot"><i class="fa-solid fa-robot"></i></div>
+                            <span class="node-date">24 AUG+</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Timeline Detail Card -->
+                <div class="timeline-detail-card" id="timeline-detail-card">
+                    <div class="detail-header">
+                        <span class="detail-date" id="timeline-date">14 JUL 2023</span>
+                        <h3 class="detail-title" id="timeline-title">Launch Phase</h3>
+                    </div>
+                    <p class="detail-text" id="timeline-desc">
+                        Chandrayaan-3 launched successfully aboard LVM3-M4 rocket from Satish Dhawan Space Centre (SDSC) SHAR, Sriharikota, placing the spacecraft in precise Earth orbit.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission Components -->
+        <section id="components" class="components-section scroll-reveal">
+            <div class="section-container">
+                <div class="section-header center">
+                    <span class="section-badge">MISSION COMPONENTS</span>
+                    <h2 class="section-title">The Three Pillars</h2>
+                </div>
+
+                <div class="components-grid">
+                    <!-- Component 1 -->
+                    <div class="component-card">
+                        <div class="comp-img-wrapper">
+                            <img src="assets/vikram.png" alt="Vikram Lander module" class="comp-img">
+                        </div>
+                        <div class="comp-info">
+                            <h3 class="comp-title">Vikram Lander</h3>
+                            <p class="comp-desc">The spacecraft designed to touch down on the lunar surface. It houses science payloads to study thermal conductivity and moonquakes.</p>
+                            <button class="comp-link-btn" data-comp="vikram">
+                                <span>Learn More</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Component 2 -->
+                    <div class="component-card">
+                        <div class="comp-img-wrapper">
+                            <img src="assets/pragyan.png" alt="Pragyan Rover exploring moon" class="comp-img">
+                        </div>
+                        <div class="comp-info">
+                            <h3 class="comp-title">Pragyan Rover</h3>
+                            <p class="comp-desc">A 6-wheeled solar-powered exploration rover designed to navigate up to 500 meters and conduct in-situ chemical composition checks.</p>
+                            <button class="comp-link-btn" data-comp="pragyan">
+                                <span>Learn More</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Component 3 -->
+                    <div class="component-card">
+                        <div class="comp-img-wrapper">
+                            <img src="assets/propulsion.png" alt="Propulsion module orbiting" class="comp-img">
+                        </div>
+                        <div class="comp-info">
+                            <h3 class="comp-title">Propulsion Module</h3>
+                            <p class="comp-desc">The module responsible for conveying the lander and rover combination from injection orbit up to 100km lunar orbit before separation.</p>
+                            <button class="comp-link-btn" data-comp="propulsion">
+                                <span>Learn More</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <p>&copy; 2026 ISRO Space Tribute. All Rights Reserved.</p>
+            </div>
+            
+            <div class="footer-center">
+                <div class="pride-signature">
+                    <span>MADE WITH PRIDE FOR INDIA'S SPACE JOURNEY</span>
+                    <span class="flag-icon"><i class="fa-solid fa-satellite"></i> 🇮🇳</span>
+                </div>
+            </div>
+
+            <div class="footer-right">
+                <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Video Modal Popup -->
+    <div class="modal" id="video-modal">
+        <div class="modal-backdrop" id="modal-close-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close-btn" aria-label="Close Modal">&times;</button>
+            <div class="video-container">
+                <!-- Embedding a beautiful, high-quality, simulated Chandrayaan-3 landing video from YouTube -->
+                <iframe id="video-iframe" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Component Detail Drawer Modal -->
+    <div class="drawer" id="component-drawer">
+        <div class="drawer-backdrop" id="drawer-close-backdrop"></div>
+        <div class="drawer-content">
+            <button class="drawer-close" id="drawer-close-btn" aria-label="Close Drawer">&times;</button>
+            <div class="drawer-body" id="drawer-body-content">
+                <!-- Dynamic Content Injected here via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js (via CDN for high performance 3D moon rendering) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- main app scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
