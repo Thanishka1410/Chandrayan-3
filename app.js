@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 1. INITIALIZE THREE.JS SPACE ENVIRONMENT ---
     const canvas = document.getElementById('space-canvas');
     let renderer, scene, camera;
-    let moon, asteroidBelt = [], starParticles;
+    let starParticles;
     
     // Mouse interaction tracking
     let mouseX = 0, mouseY = 0;
@@ -51,220 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
         scene.add(rimLight);
 
         // Generate Assets
-        createProceduralMoon();
-        createAsteroidBelt();
         createStarField();
         
         animate();
     }
     
-    // --- 2. PROCEDURAL HIGH-FIDELITY LUNAR GENERATOR ---
-    // Creates a detailed lunar texture offline on HTML5 Canvas to eliminate loading lag
-    function createProceduralMoon() {
-        const textureResolution = 2048;
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = textureResolution;
-        tempCanvas.height = textureResolution / 2;
-        const ctx = tempCanvas.getContext('2d');
-        
-        // Base fill (dark grey lunar surface)
-        ctx.fillStyle = '#65676e';
-        ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-        
-        // Render Highland / Lowland Mare structures using fractional noise particles
-        for (let i = 0; i < 60; i++) {
-            const x = Math.random() * tempCanvas.width;
-            const y = Math.random() * tempCanvas.height;
-            const radius = 80 + Math.random() * 250;
-            const isDark = Math.random() > 0.45;
-            
-            const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
-            if (isDark) {
-                gradient.addColorStop(0, 'rgba(40, 42, 48, 0.7)');
-                gradient.addColorStop(0.5, 'rgba(60, 62, 68, 0.4)');
-            } else {
-                gradient.addColorStop(0, 'rgba(125, 127, 134, 0.45)');
-                gradient.addColorStop(0.5, 'rgba(100, 102, 108, 0.15)');
-            }
-            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-            
-            ctx.fillStyle = gradient;
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        
-        // Add random fine noise overlay
-        const imgData = ctx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
-        const data = imgData.data;
-        for (let i = 0; i < data.length; i += 4) {
-            const noise = (Math.random() - 0.5) * 18;
-            data[i] = Math.max(0, Math.min(255, data[i] + noise));     // Red
-            data[i+1] = Math.max(0, Math.min(255, data[i+1] + noise)); // Green
-            data[i+2] = Math.max(0, Math.min(255, data[i+2] + noise)); // Blue
-        }
-        ctx.putImageData(imgData, 0, 0);
-        
-        // Render 200+ detailed circular Craters with shadows based on lighting
-        // Simple shadows: white rim on one side, black on the other
-        for (let c = 0; c < 280; c++) {
-            const cx = Math.random() * tempCanvas.width;
-            const cy = Math.random() * tempCanvas.height;
-            const cr = 4 + Math.pow(Math.random(), 3) * 60; // Bias towards smaller craters
-            
-            // Draw dark shadow inner crater
-            ctx.fillStyle = 'rgba(25, 27, 32, 0.65)';
-            ctx.beginPath();
-            ctx.arc(cx, cy, cr, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Highlight rim (white lunar rim reflecting light)
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
-            ctx.lineWidth = Math.max(1, cr * 0.08);
-            ctx.beginPath();
-            ctx.arc(cx - cr*0.05, cy - cr*0.05, cr, 0, Math.PI * 2);
-            ctx.stroke();
-            
-            // Deep shadows (black rim offset opposite to sun)
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.45)';
-            ctx.lineWidth = Math.max(1, cr * 0.06);
-            ctx.beginPath();
-            ctx.arc(cx + cr*0.06, cy + cr*0.06, cr, 0, Math.PI * 2);
-            ctx.stroke();
-            
-            // Tycho-like ray systems for giant craters
-            if (cr > 40 && Math.random() > 0.6) {
-                const rays = 12 + Math.floor(Math.random() * 8);
-                for (let r = 0; r < rays; r++) {
-                    const angle = (r / rays) * Math.PI * 2 + Math.random() * 0.2;
-                    const rayLen = cr * (3 + Math.random() * 6);
-                    
-                    const rayGrad = ctx.createLinearGradient(
-                        cx, cy, 
-                        cx + Math.cos(angle) * rayLen, 
-                        cy + Math.sin(angle) * rayLen
-                    );
-                    rayGrad.addColorStop(0, 'rgba(255, 255, 255, 0.22)');
-                    rayGrad.addColorStop(0.2, 'rgba(255, 255, 255, 0.08)');
-                    rayGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                    
-                    ctx.strokeStyle = rayGrad;
-                    ctx.lineWidth = Math.max(0.5, cr * 0.02);
-                    ctx.beginPath();
-                    ctx.moveTo(cx, cy);
-                    ctx.lineTo(cx + Math.cos(angle) * rayLen, cy + Math.sin(angle) * rayLen);
-                    ctx.stroke();
-                }
-            }
-        }
-        
-        // Convert canvas to Three.js Texture
-        const moonTexture = new THREE.CanvasTexture(tempCanvas);
-        
-        // Generate Bump Map (Higher contrast black & white version of texture)
-        const bumpCanvas = document.createElement('canvas');
-        bumpCanvas.width = textureResolution;
-        bumpCanvas.height = textureResolution / 2;
-        const bCtx = bumpCanvas.getContext('2d');
-        bCtx.drawImage(tempCanvas, 0, 0);
-        
-        const bImgData = bCtx.getImageData(0, 0, bumpCanvas.width, bumpCanvas.height);
-        const bData = bImgData.data;
-        for (let i = 0; i < bData.length; i += 4) {
-            const v = (bData[i] + bData[i+1] + bData[i+2]) / 3;
-            // High contrast scaling to isolate craters and ridges
-            const value = Math.max(0, Math.min(255, (v - 100) * 1.5));
-            bData[i] = value;
-            bData[i+1] = value;
-            bData[i+2] = value;
-        }
-        bCtx.putImageData(bImgData, 0, 0);
-        const moonBumpMap = new THREE.CanvasTexture(bumpCanvas);
-        
-        // Create Mesh
-        const geometry = new THREE.SphereGeometry(1.65, 64, 64);
-        const material = new THREE.MeshStandardMaterial({
-            map: moonTexture,
-            bumpMap: moonBumpMap,
-            bumpScale: 0.045,
-            roughness: 0.88,
-            metalness: 0.02
-        });
-        
-        moon = new THREE.Mesh(geometry, material);
-        // Position Moon to the right side, aligning with the visual layout in the user's image
-        moon.position.set(1.9, 0.2, 0);
-        scene.add(moon);
-    }
-    
-    // --- 3. DYNAMIC PROCEDURAL ASTEROID BELT ---
-    // Creates 30 distinct orbiting asteroid rocks
-    function createAsteroidBelt() {
-        const count = 35;
-        const asteroidMaterial = new THREE.MeshStandardMaterial({
-            color: 0x4f525c,
-            roughness: 0.9,
-            metalness: 0.1
-        });
-        
-        for (let i = 0; i < count; i++) {
-            // Random rocky geometry (Dodecahedron with vertex noise)
-            const rockSize = 0.025 + Math.random() * 0.075;
-            const rockGeom = new THREE.DodecahedronGeometry(rockSize, 1);
-            
-            // Perturb vertices slightly to create a unique jagged shape
-            const posAttr = rockGeom.attributes.position;
-            for (let v = 0; v < posAttr.count; v++) {
-                const vx = posAttr.getX(v);
-                const vy = posAttr.getY(v);
-                const vz = posAttr.getZ(v);
-                
-                posAttr.setX(v, vx + (Math.random() - 0.5) * (rockSize * 0.3));
-                posAttr.setY(v, vy + (Math.random() - 0.5) * (rockSize * 0.3));
-                posAttr.setZ(v, vz + (Math.random() - 0.5) * (rockSize * 0.3));
-            }
-            rockGeom.computeVertexNormals();
-            
-            const asteroid = new THREE.Mesh(rockGeom, asteroidMaterial);
-            
-            // Setup custom orbit variables centered around the Moon's position
-            const orbitRadius = 1.95 + Math.random() * 1.5;
-            // Tilt the orbital plane of the asteroid belt slightly
-            const orbitalTilt = (Math.random() - 0.5) * 0.35;
-            const angle = Math.random() * Math.PI * 2;
-            const speed = 0.0006 + Math.random() * 0.0012;
-            
-            asteroid.userData = {
-                radius: orbitRadius,
-                tilt: orbitalTilt,
-                angle: angle,
-                speed: speed,
-                rotSpeedX: (Math.random() - 0.5) * 0.015,
-                rotSpeedY: (Math.random() - 0.5) * 0.015,
-                rotSpeedZ: (Math.random() - 0.5) * 0.015
-            };
-            
-            // Set initial position
-            updateAsteroidPosition(asteroid);
-            
-            scene.add(asteroid);
-            asteroidBelt.push(asteroid);
-        }
-    }
-    
-    function updateAsteroidPosition(asteroid) {
-        const u = asteroid.userData;
-        // Circular orbit relative to the Moon's current position
-        const moonX = moon.position.x;
-        const moonY = moon.position.y;
-        const moonZ = moon.position.z;
-        
-        asteroid.position.x = moonX + Math.cos(u.angle) * u.radius;
-        asteroid.position.z = moonZ + Math.sin(u.angle) * u.radius;
-        asteroid.position.y = moonY + Math.sin(u.angle) * u.radius * u.tilt;
-    }
-    
-    // --- 4. TWINKLING COSMIC STARFIELD ---
+    // --- 2. TWINKLING COSMIC STARFIELD ---
     function createStarField() {
         const count = 1200;
         const geometry = new THREE.BufferGeometry();
@@ -335,24 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function animate() {
         requestAnimationFrame(animate);
         
-        // Spin the Moon slowly on its polar axis
-        if (moon) {
-            moon.rotation.y += 0.0016;
-        }
-        
-        // Propagate asteroids along their lunar orbits
-        asteroidBelt.forEach(asteroid => {
-            const u = asteroid.userData;
-            u.angle += u.speed;
-            
-            updateAsteroidPosition(asteroid);
-            
-            // Random self-rotation to simulate tumbling asteroid chunks
-            asteroid.rotation.x += u.rotSpeedX;
-            asteroid.rotation.y += u.rotSpeedY;
-            asteroid.rotation.z += u.rotSpeedZ;
-        });
-        
         // Twist starfield slightly
         if (starParticles) {
             starParticles.rotation.y += 0.00015;
@@ -397,17 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         renderer.setSize(width, height);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        
-        // Readjust moon position for responsiveness
-        if (moon) {
-            if (width < 768) {
-                moon.position.set(0, 0, -2); // center & distance moon on small screens
-            } else if (width < 1024) {
-                moon.position.set(1.4, 0.2, -0.5);
-            } else {
-                moon.position.set(1.9, 0.2, 0);
-            }
-        }
     });
     
     // Trigger window resize immediately once to correct viewport scaling
